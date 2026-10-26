@@ -2,12 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {makeSeed,metrics,stageOf,createReservation,updateLead,activateReservation,cancelReservation,endLease,recordPayment,remaining,invoiceStatus,validateState,loadState,saveState,STORAGE_KEY,money,csv,ruleCandidates,validDate} from '../model.js';
 
-test('le scénario est cohérent, les devises et les centres restent séparés',()=>{
-  const s=makeSeed();assert.equal(validateState(s),true);assert.equal(s.units.length,84);
-  assert.equal(metrics(s,'ch').total,48);assert.equal(metrics(s,'fr').total,36);
-  assert.equal(metrics(s,'ch').occupied,30);assert.equal(metrics(s,'fr').occupied,24);
-  assert.equal(metrics(s,'ch').occupancy,67);assert.equal(metrics(s,'fr').occupancy,71);
-  assert.match(money(99,'ch'),/CHF/);assert.match(money(99,'fr'),/€/);
+test('le scénario suisse est cohérent et les montants sont en CHF',()=>{
+  const s=makeSeed();assert.equal(validateState(s),true);assert.equal(s.units.length,48);
+  assert.equal(metrics(s,'ch').total,48);
+  assert.equal(metrics(s,'ch').occupied,30);
+  assert.equal(metrics(s,'ch').occupancy,67);
+  assert.match(money(99,'ch'),/CHF/);
   assert.ok(s.leads.every(l=>s.units.find(u=>u.id===l.unitId).centre===l.centre));
   assert.equal(new Set(s.leads.map(l=>l.unitId)).size,s.leads.length);
 });
@@ -19,9 +19,9 @@ test('la création réserve un seul box, une deuxième demande concurrente est r
   assert.equal(s.leads.filter(x=>x.unitId===u.id).length,1);
 });
 test('un box d’un autre centre, une date invalide et des coordonnées vides sont refusés',()=>{
-  const s=makeSeed(),u=s.units.find(u=>u.centre==='fr'&&u.status==='free');
-  const base={centre:'fr',unitId:u.id,name:'Alex',email:'a@exemple.invalid',start:'2026-11-03'};
-  assert.throws(()=>createReservation(s,{...base,centre:'ch'}),/disponible/);
+  const s=makeSeed(),u=s.units.find(u=>u.centre==='ch'&&u.status==='free');
+  const base={centre:'ch',unitId:u.id,name:'Alex',email:'a@exemple.invalid',start:'2026-11-03'};
+  assert.throws(()=>createReservation(s,{...base,centre:'unknown'}),/disponible/);
   for(const start of ['2026-10-25','2026-02-31','2026-13-01','not-a-date'])assert.throws(()=>createReservation(s,{...base,start}));
   assert.throws(()=>createReservation(s,{...base,name:' '}));assert.throws(()=>createReservation(s,{...base,email:'invalid'}));
   assert.equal(validDate('2028-02-29'),true);assert.equal(validDate('2026-02-29'),false);
@@ -68,8 +68,8 @@ test('clôturer une location préserve les factures, y compris leurs soldes',()=
 });
 test('le stockage corrompu ou indisponible ne casse pas le chargement',()=>{
   const mock={getItem:()=>'{broken',setItem:()=>{throw new Error('quota');}};
-  assert.equal(loadState(mock).units.length,84);assert.equal(saveState(mock,makeSeed()),false);
-  assert.equal(loadState({getItem:()=>JSON.stringify({version:1})}).units.length,84);
+  assert.equal(loadState(mock).units.length,48);assert.equal(saveState(mock,makeSeed()),false);
+  assert.equal(loadState({getItem:()=>JSON.stringify({version:1})}).units.length,48);
   const contents=new Map(),store={getItem:k=>contents.get(k),setItem:(k,v)=>contents.set(k,v)};const s=makeSeed();s.settings.contact='Test';
   assert.equal(saveState(store,s),true);assert.equal(loadState(store).settings.contact,'Test');assert.ok(contents.has(STORAGE_KEY));
 });

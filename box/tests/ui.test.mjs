@@ -15,7 +15,7 @@ globalThis.HTMLInputElement=class {};
 globalThis.document={title:'',activeElement:null,body:{style:{},classList:{toggle(){},add(){},remove(){}},append(){}},querySelector:s=>elements.get(s)||null,getElementById:()=>null,addEventListener:(e,fn)=>listeners[e]=fn,createElement:()=>element()};
 const modelURL=new URL('../model.js',import.meta.url).href;
 let source=await readFile(new URL('../app.js',import.meta.url),'utf8');
-source=source.replace("'./model.js'",JSON.stringify(modelURL));
+source=source.replace(/'\.\/model\.js(?:\?[^']*)?'/,JSON.stringify(modelURL));
 source+='\nexport {render,actionHandler,openOverlay,closeOverlay}; export const testState=()=>state; export const testUi=()=>ui;\n//# sourceURL=chantelio-box-ui-test.mjs';
 const app=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
 const html=()=>elements.get('#app').innerHTML;
@@ -25,7 +25,6 @@ test('les 14 écrans se rendent avec leurs données et leurs liens',async()=>{
   const pages=['apercu','reservations','box','clients','documents','contrats','paiements','automatisations','analyses','parametres','guide','presentation','client','reserver'];
   const snapshots=new URL('./snapshots/',import.meta.url);await mkdir(snapshots,{recursive:true});
   for(const page of pages){location.hash='#/'+page;app.render();const h=html();assert.ok(h.length>1000,page);assert.match(h,/main-content/,page);assert.doesNotMatch(h,/\b(?:undefined|NaN)\b/,page);assert.match(h,/démo|démonstration|Démo|Démonstration/,page);await writeFile(new URL(page+'.html',snapshots),h);}
-  const state=app.testState();state.centre='fr';for(const page of pages.filter(p=>p!=='presentation')){location.hash='#/'+page;app.render();assert.doesNotMatch(html(),/\b(?:undefined|NaN)\b/,page+' FR');}state.centre='ch';
 });
 test('les principales fiches, formulaires et fenêtres sont accessibles',()=>{
   const state=app.testState();const ready=state.leads.find(l=>l.id==='ch-lead-3');

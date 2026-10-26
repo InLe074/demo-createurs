@@ -10,7 +10,7 @@ Démonstration interactive d’un logiciel pour les centres de stockage indépen
 - `#/reserver` : choix d’un box libre et création d’une demande.
 - `#/guide` : visite guidée et cadre de la démonstration.
 
-Le sélecteur de centre bascule entre Lausanne (CHF, 48 box) et Annecy (EUR, 36 box). Les sociétés, clients, coordonnées, documents, montants et événements sont fictifs. Le scénario est daté du 26 octobre 2026.
+Le centre de démonstration est situé à Lausanne (CHF, 48 box). Les sociétés, clients, coordonnées, documents, montants et événements sont fictifs. Le scénario est daté du 26 octobre 2026.
 
 ## Fonctionnalités testables
 
@@ -37,7 +37,7 @@ Cette version est une démonstration locale au navigateur, publiable sur GitHub 
 
 **Aucun email réel, aucune transaction financière et aucune signature contractuelle ne sont déclenchés.** Aucun document personnel ni numéro de carte bancaire n’est nécessaire. Les exemples téléchargeables portent une mention de démonstration.
 
-Le dépôt illustratif est un paramètre fictif du centre et ne représente pas une règle juridique française ou suisse.
+Le dépôt illustratif est un paramètre fictif du centre et ne représente pas une règle juridique suisse.
 
 ## Architecture
 
@@ -59,7 +59,7 @@ npm test
 npm run check
 ```
 
-Les contrôles couvrent 17 tests : cohérence des centres et des devises, réservation exclusive, dates, vérification des pièces, activation conditionnelle, paiements partiels, clôture sans perte de factures, persistance et corruption du stockage, exports CSV, règles, rendu des 14 écrans, fenêtres et filtres.
+Les contrôles couvrent 17 tests : cohérence des dossiers du centre et des montants en CHF, réservation exclusive, dates, vérification des pièces, activation conditionnelle, paiements partiels, clôture sans perte de factures, persistance et corruption du stockage, exports CSV, règles, rendu des 14 écrans, fenêtres et filtres.
 
 Les tests de rendu utilisent un harnais DOM minimal et ne remplacent pas une vérification visuelle dans un vrai navigateur. L’aperçu navigateur de l’environnement de construction était indisponible lors de cette livraison.
 

@@ -1,10 +1,9 @@
 // Règles métier et données fictives de la démonstration.
 export const VERSION = 1;
-export const STORAGE_KEY = 'chantelio-box-demo-v1';
+export const STORAGE_KEY = 'chantelio-box-demo-ch-v1';
 export const TODAY = '2026-10-26';
 export const CENTRES = [
-  {id:'ch', name:'Rivage · Lausanne', city:'Lausanne', country:'Suisse', code:'CH', currency:'CHF', locale:'fr-CH', address:'Centre de démonstration · Lausanne', depositMonths:2},
-  {id:'fr', name:'Rivage · Annecy', city:'Annecy', country:'France', code:'FR', currency:'EUR', locale:'fr-FR', address:'Centre de démonstration · Annecy', depositMonths:1}
+  {id:'ch', name:'Rivage · Lausanne', city:'Lausanne', country:'Suisse', code:'CH', currency:'CHF', locale:'fr-CH', address:'Centre de démonstration · Lausanne', depositMonths:2}
 ];
 export const STAGES = [
   {id:'new', label:'Nouvelle demande', short:'Demande', color:'blue'},
@@ -19,7 +18,7 @@ export const DEMO_NAMES = ['Emma Laurent','Thomas Perrin','Sarah Morel','Julien 
 export const clone = value => JSON.parse(JSON.stringify(value));
 export function centre(id){ return CENTRES.find(c=>c.id===id) || CENTRES[0]; }
 export function money(value, id='ch', decimals=0){ const c=centre(id); return new Intl.NumberFormat(c.locale,{style:'currency',currency:c.currency,minimumFractionDigits:decimals,maximumFractionDigits:decimals}).format(Number(value)||0); }
-export function dateLabel(value, options={day:'numeric',month:'short'}){ return value ? new Intl.DateTimeFormat('fr-FR',options).format(new Date(value+'T12:00:00')) : '—'; }
+export function dateLabel(value, options={day:'numeric',month:'short'}){ return value ? new Intl.DateTimeFormat('fr-CH',options).format(new Date(value+'T12:00:00')) : '—'; }
 export function plusDays(value,days){const d=new Date(value+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+days);return d.toISOString().slice(0,10);}
 export function validDate(value){if(!/^\d{4}-\d{2}-\d{2}$/.test(value||''))return false;const d=new Date(value+'T12:00:00Z');return !Number.isNaN(+d)&&d.toISOString().slice(0,10)===value;}
 export function daysBetween(a,b){return Math.round((new Date(b+'T12:00:00Z')-new Date(a+'T12:00:00Z'))/86400000);}
@@ -36,23 +35,23 @@ export function logEvent(state,type,text,target){state.events.unshift({id:uid('e
 export function makeSeed(){
   const state={version:VERSION,centre:'ch',units:[],clients:[],leases:[],leads:[],invoices:[],events:[],rules:[{id:'documents',title:'Un dossier qui avance',description:'Pièces manquantes, 2 jours après la demande.',enabled:true,delay:2},{id:'signature',title:'Une signature sans oubli',description:'Contrat en attente de signature depuis 2 jours.',enabled:true,delay:2},{id:'payment',title:'Le bon rappel au bon moment',description:'Premier règlement attendu avant l’entrée.',enabled:false,delay:1},{id:'late',title:'Des loyers bien suivis',description:'Échéance dépassée depuis 3 jours.',enabled:true,delay:3}],settings:{company:'Rivage Stockage',contact:'Inès',notification:true,compact:false},lastRuleRun:null};
   const sizes=[2,3,5,5,7,10,14,18];
-  for(const [ci,c] of CENTRES.entries()){
-    const count=ci===0?48:36, occupied=ci===0?30:24, reserved=ci===0?7:4;
+  for(const c of CENTRES){
+    const count=48, occupied=30, reserved=7;
     for(let n=0;n<count;n++){
-      const area=sizes[n%sizes.length], price=Math.round((ci===0?32:18)*area+(ci===0?48:22));
+      const area=sizes[n%sizes.length], price=Math.round(32*area+48);
       const label=(n<24?'A':'B')+'-'+String(n%24+1).padStart(2,'0');
-      const unit={id:c.id+'-'+label,label,centre:c.id,area,volume:Math.round(area*2.6),price,status:n<occupied?'occupied':n<occupied+reserved?'reserved':n>=count-(ci===0?3:2)?'maintenance':'free',floor:'Rez-de-chaussée',building:n<24?'Bâtiment A':'Bâtiment B',features:area>=10?['Accès direct','Plain-pied','Sec et ventilé']:['Intérieur','Plain-pied','Sec et ventilé']};
+      const unit={id:c.id+'-'+label,label,centre:c.id,area,volume:Math.round(area*2.6),price,status:n<occupied?'occupied':n<occupied+reserved?'reserved':n>=count-3?'maintenance':'free',floor:'Rez-de-chaussée',building:n<24?'Bâtiment A':'Bâtiment B',features:area>=10?['Accès direct','Plain-pied','Sec et ventilé']:['Intérieur','Plain-pied','Sec et ventilé']};
       state.units.push(unit);
       if(n<occupied){
-        const name=DEMO_NAMES[(n+8+ci*4)%DEMO_NAMES.length],clientId=c.id+'-client-'+n;
-        const client={id:clientId,centre:c.id,name,email:'client.'+(n+1)+'@exemple.invalid',phone:ci===0?'+41 · numéro fictif':'+33 · numéro fictif',type:name.includes('Atelier')||name.includes('Co')?'Professionnel':'Particulier',note:n===2?'Préfère les échanges par email.':''};state.clients.push(client);
+        const name=DEMO_NAMES[(n+8)%DEMO_NAMES.length],clientId=c.id+'-client-'+n;
+        const client={id:clientId,centre:c.id,name,email:'client.'+(n+1)+'@exemple.invalid',phone:'+41 · numéro fictif',type:name.includes('Atelier')||name.includes('Co')?'Professionnel':'Particulier',note:n===2?'Préfère les échanges par email.':''};state.clients.push(client);
         const leaseId=c.id+'-lease-'+n;
         state.leases.push({id:leaseId,centre:c.id,clientId,unitId:unit.id,monthly:price,start:'2026-'+String(3+n%6).padStart(2,'0')+'-01',end:n===3||n===12?plusDays(TODAY,n===3?3:8):'',deposit:price*c.depositMonths,status:'active',docs:{identity:'verified',insurance:'verified'},signed:true});
-        state.invoices.push({id:c.id+'-invoice-'+n,number:(ci===0?'CH':'FR')+'-2026-'+String(1001+n),centre:c.id,clientId,leaseId,unitId:unit.id,amount:price,paid:n===1||n===7?0:n===14?Math.round(price/2):price,issued:'2026-10-01',due:n===1||n===7?'2026-10-05':n===14?'2026-10-28':'2026-10-10',method:'Virement',period:'Octobre 2026'});
+        state.invoices.push({id:c.id+'-invoice-'+n,number:c.code+'-2026-'+String(1001+n),centre:c.id,clientId,leaseId,unitId:unit.id,amount:price,paid:n===1||n===7?0:n===14?Math.round(price/2):price,issued:'2026-10-01',due:n===1||n===7?'2026-10-05':n===14?'2026-10-28':'2026-10-10',method:'Virement',period:'Octobre 2026'});
       }
     }
     for(let i=0;i<reserved;i++){
-      const u=state.units.filter(u=>u.centre===c.id&&u.status==='reserved')[i];const name=DEMO_NAMES[i+ci*8];const clientId=c.id+'-prospect-'+i;state.clients.push({id:clientId,centre:c.id,name,email:'reservation.'+(i+1)+'@exemple.invalid',phone:ci===0?'+41 · numéro fictif':'+33 · numéro fictif',type:i===5?'Professionnel':'Particulier',note:''});
+      const u=state.units.filter(u=>u.centre===c.id&&u.status==='reserved')[i];const name=DEMO_NAMES[i];const clientId=c.id+'-prospect-'+i;state.clients.push({id:clientId,centre:c.id,name,email:'reservation.'+(i+1)+'@exemple.invalid',phone:'+41 · numéro fictif',type:i===5?'Professionnel':'Particulier',note:''});
       const patterns=[{accepted:true,docs:{identity:'received',insurance:'missing'},signed:false,paid:false},{accepted:true,docs:{identity:'verified',insurance:'verified'},signed:false,paid:false},{accepted:true,docs:{identity:'verified',insurance:'verified'},signed:true,paid:false},{accepted:true,docs:{identity:'verified',insurance:'verified'},signed:true,paid:true},{accepted:false,docs:{identity:'missing',insurance:'missing'},signed:false,paid:false},{accepted:true,docs:{identity:'missing',insurance:'received'},signed:false,paid:false},{accepted:true,docs:{identity:'verified',insurance:'verified'},signed:false,paid:false}];
       state.leads.push({id:c.id+'-lead-'+i,centre:c.id,clientId,unitId:u.id,start:plusDays(TODAY,i<4?i+1:i+3),created:plusDays(TODAY,-(i%3+1)),source:i%3===0?'Site internet':i%3===1?'Téléphone':'Email',monthly:u.price,deposit:u.price*c.depositMonths,note:i===0?'Déménagement prévu cette semaine. Souhaite finaliser son dossier à distance.':i===3?'Tous les éléments sont validés. Vous pouvez confirmer son arrivée.':'',cancelled:false,activated:false,...clone(patterns[i])});
     }
