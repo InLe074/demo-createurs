@@ -5,7 +5,7 @@ Démonstration interactive d’un logiciel pour les centres de stockage indépen
 ## Découvrir
 
 - `#/apercu` : espace gérant et priorités du jour.
-- `#/presentation` : présentation du produit et hypothèses de tarifs.
+- `#/presentation` : présentation du produit et du parcours client.
 - `#/client` : parcours d’un locataire fictif.
 - `#/reserver` : choix d’un box libre et création d’une demande.
 - `#/guide` : visite guidée et cadre de la démonstration.
@@ -37,7 +37,7 @@ Cette version est une démonstration locale au navigateur, publiable sur GitHub 
 
 **Aucun email réel, aucune transaction financière et aucune signature contractuelle ne sont déclenchés.** Aucun document personnel ni numéro de carte bancaire n’est nécessaire. Les exemples téléchargeables portent une mention de démonstration.
 
-Les tarifs de 49 puis 99 EUR/CHF par centre sont des hypothèses commerciales, pas une offre souscriptible. Les services de paiement, de signature et les taxes ne sont pas facturés dans cette version. Le dépôt illustratif est un paramètre fictif du centre et ne représente pas une règle juridique française ou suisse.
+Le dépôt illustratif est un paramètre fictif du centre et ne représente pas une règle juridique française ou suisse.
 
 ## Architecture
 

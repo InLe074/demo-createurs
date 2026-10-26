@@ -47,7 +47,6 @@ test('les vues et les filtres restent reliés à des données réelles du scéna
   app.actionHandler('unit-view','cards');assert.match(html(),/unit-card/);
   location.hash='#/reservations';app.actionHandler('reservation-view','list');assert.match(html(),/data-table/);
   location.hash='#/paiements';app.actionHandler('payment-filter','late');assert.match(html(),/En retard/);
-  location.hash='#/presentation';app.actionHandler('pricing-country','fr');assert.match(html(),/EUR \/ mois/);
 });
 test('les données saisies sont échappées dans le rendu des clients et des notes',()=>{
   const s=app.testState(),c=s.clients.find(c=>c.centre==='ch');const original=c.name;c.name='<img src=x onerror=alert(1)>';location.hash='#/clients';app.testUi().clientFilter='all';app.render();assert.match(html(),/&lt;img src=x onerror=alert\(1\)&gt;/);assert.doesNotMatch(html(),/<img src=x/);c.name=original;

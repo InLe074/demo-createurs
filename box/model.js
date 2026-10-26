@@ -3,8 +3,8 @@ export const VERSION = 1;
 export const STORAGE_KEY = 'chantelio-box-demo-v1';
 export const TODAY = '2026-10-26';
 export const CENTRES = [
-  {id:'ch', name:'Rivage · Lausanne', city:'Lausanne', country:'Suisse', code:'CH', currency:'CHF', locale:'fr-CH', address:'Centre de démonstration · Lausanne', depositMonths:2, pilot:49, price:99},
-  {id:'fr', name:'Rivage · Annecy', city:'Annecy', country:'France', code:'FR', currency:'EUR', locale:'fr-FR', address:'Centre de démonstration · Annecy', depositMonths:1, pilot:49, price:99}
+  {id:'ch', name:'Rivage · Lausanne', city:'Lausanne', country:'Suisse', code:'CH', currency:'CHF', locale:'fr-CH', address:'Centre de démonstration · Lausanne', depositMonths:2},
+  {id:'fr', name:'Rivage · Annecy', city:'Annecy', country:'France', code:'FR', currency:'EUR', locale:'fr-FR', address:'Centre de démonstration · Annecy', depositMonths:1}
 ];
 export const STAGES = [
   {id:'new', label:'Nouvelle demande', short:'Demande', color:'blue'},
