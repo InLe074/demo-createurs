@@ -1,0 +1,11 @@
+{
+  "name": "chantelio-box-demo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Démonstration interactive France/Suisse pour centres de stockage indépendants",
+  "scripts": {
+    "test": "node --test tests/model.test.mjs tests/ui.test.mjs",
+    "check": "node --check app.js && node --check model.js"
+  }
+}
