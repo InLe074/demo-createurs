@@ -1,0 +1,11 @@
+{
+  "name": "chantelio-box-fr",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Maquette interactive France pour centres de stockage indépendants, avec données fictives en euros",
+  "scripts": {
+    "test": "node --test tests/model.test.mjs tests/ui.test.mjs",
+    "check": "node --check dist/app.js && node --check dist/model.js"
+  }
+}
