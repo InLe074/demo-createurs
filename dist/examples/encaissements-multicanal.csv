@@ -1,0 +1,11 @@
+﻿transaction_id;date;montant;devise;moyen;reference;client;type_operation;description
+DEMO-1001;2026-11-02;180.00;CHF;Virement;DEMO-FACT-1001;Emma Laurent;paiement;Loyer novembre
+DEMO-1002;2026-11-02;100.00;CHF;Carte;DEMO-FACT-1002;Thomas Perrin;paiement;Carte - opération individuelle
+DEMO-1003;2026-11-02;160.00;CHF;TWINT;DEMO-FACT-1003;Sarah Morel;paiement;Paiement individuel
+DEMO-1004;2026-11-02;50.00;CHF;Espèces;DEMO-FACT-1004;Julien Favre;paiement;Acompte saisi au guichet fictif
+DEMO-1005;2026-11-02;90.00;CHF;Chèque;DEMO-FACT-1005;Léa Robert;paiement;Chèque confirmé dans le scénario
+DEMO-1006;2026-11-02;120.00;CHF;QR;DEMO-FACT-1006;Atelier du Lac;paiement;Référence de démonstration
+DEMO-1007;2026-11-02;120.00;CHF;Prélèvement;;Camille Brun;paiement;Deux factures possibles - à vérifier
+DEMO-1008;2026-11-02;180.00;EUR;Virement;DEMO-FACT-1001;Emma Laurent;paiement;Devise différente
+DEMO-1009;2026-11-02;420.00;CHF;Carte;;;versement_global;Versement regroupé du prestataire - ne pas compter deux fois
+DEMO-1010;2026-11-02;-20.00;CHF;Autre;;Nicolas Rey;remboursement;À traiter séparément

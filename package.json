@@ -1,0 +1,10 @@
+{
+  "name": "chantelio-payments-lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check dist/app.js && node --check dist/domain.js && node --check dist/import.js && node --check dist/mock-connector.js && node --check dist/view.js"
+  }
+}
